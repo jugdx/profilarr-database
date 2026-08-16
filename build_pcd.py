@@ -86,7 +86,6 @@ profiles = [
 
 # --- 4. PCD GENERATION FUNCTIONS ---
 def build_directories():
-    # Purge the old ops directory entirely to avoid ghost folders
     if os.path.exists("ops"):
         shutil.rmtree("ops")
         
@@ -117,6 +116,7 @@ def generate_formats():
             "name": data["name"],
             "description": data["description"],
             "trash_id": get_hash(cf_id),
+            "arr_types": ["radarr", "sonarr"], # FIX : Application ciblée
             "includeCustomFormatWhenRenaming": False,
             "specifications": [
                 {
@@ -124,7 +124,12 @@ def generate_formats():
                     "implementation": "ReleaseTitleSpecification",
                     "negate": False,
                     "required": True,
-                    "fields": {"value": data["regex"]}
+                    "fields": [
+                        {
+                            "name": "value",
+                            "value": data["regex"] # FIX : Tableau d'objets exigé par le schéma
+                        }
+                    ]
                 }
             ]
         }
@@ -136,6 +141,7 @@ def generate_profiles():
         payload = {
             "name": p["name"],
             "trash_id": get_hash(p["id"]),
+            "arr_types": ["radarr", "sonarr"], # FIX : Application ciblée
             "upgrades_allowed": False,
             "minimum_custom_format_score": p["min_score"],
             "qualities": [{"name": q} for q in p["qualities"]],
@@ -148,7 +154,7 @@ def generate_quality_definitions():
     for arr in ["radarr", "sonarr"]:
         payload = {
             "trash_id": get_hash(f"quality-definition-{arr}"),
-            "type": arr,
+            "arr_types": [arr], # FIX : Application ciblée
             "qualities": [
                 {"quality": "WEBDL-1080p", "min": 0, "max": 2000},
                 {"quality": "Bluray-1080p", "min": 0, "max": 2000},
@@ -166,4 +172,4 @@ if __name__ == "__main__":
     generate_formats()
     generate_profiles()
     generate_quality_definitions()
-    print("✅ PCD v2 structure generated successfully with schema dependencies!")
+    print("✅ PCD v2 structure generated successfully with strict TRaSH schema compliance!")
