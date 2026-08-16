@@ -127,7 +127,7 @@ def build_sql():
         
         # Insert Regular Expression
         add_op("regular_expression", regex_name, [
-            f"INSERT INTO \"regular_expressions\" (\"name\", \"regular_expression\") VALUES ('{regex_name}', '{regex}');"
+            f"INSERT INTO \"regular_expressions\" (\"name\", \"pattern\") VALUES ('{regex_name}', '{regex}');"
         ])
         
         # Insert Custom Format

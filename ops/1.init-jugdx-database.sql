@@ -1,11 +1,11 @@
 -- @operation: export
 -- @entity: batch
 -- @name: Init JuGdx Light Database
--- @exportedAt: 2026-08-16T21:29:35.000Z
+-- @exportedAt: 2026-08-16T21:34:38.000Z
 -- @opIds: 1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035
 
 -- --- BEGIN op 1000 ( insert regular_expression "REGEX_FR - MULTi & VFF" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_FR - MULTi & VFF', '(?i)(?=.*\b(MULTI|DUAL)\b)(?=.*\b(VFF|TRUEFRENCH|VF2|VOF|VOFR)\b)');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_FR - MULTi & VFF', '(?i)(?=.*\b(MULTI|DUAL)\b)(?=.*\b(VFF|TRUEFRENCH|VF2|VOF|VOFR)\b)');
 -- --- END op 1000
 
 -- --- BEGIN op 1001 ( insert custom_format "FR - MULTi & VFF" )
@@ -18,7 +18,7 @@ INSERT INTO "condition_patterns" ("custom_format_name", "condition_name", "regul
 -- --- END op 1002
 
 -- --- BEGIN op 1003 ( insert regular_expression "REGEX_FR - VF Mono" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_FR - VF Mono', '(?i)\b(FRENCH|VF|VFF|TRUEFRENCH|VF2|VOF|VOFR)\b(?!.*\b(MULTI|DUAL)\b)');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_FR - VF Mono', '(?i)\b(FRENCH|VF|VFF|TRUEFRENCH|VF2|VOF|VOFR)\b(?!.*\b(MULTI|DUAL)\b)');
 -- --- END op 1003
 
 -- --- BEGIN op 1004 ( insert custom_format "FR - VF Mono" )
@@ -31,7 +31,7 @@ INSERT INTO "condition_patterns" ("custom_format_name", "condition_name", "regul
 -- --- END op 1005
 
 -- --- BEGIN op 1006 ( insert regular_expression "REGEX_FR - VOSTFR" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_FR - VOSTFR', '(?i)\b(VOST(\.|\-)?FR|SUB\.?FRENCH|STFR)\b');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_FR - VOSTFR', '(?i)\b(VOST(\.|\-)?FR|SUB\.?FRENCH|STFR)\b');
 -- --- END op 1006
 
 -- --- BEGIN op 1007 ( insert custom_format "FR - VOSTFR" )
@@ -44,7 +44,7 @@ INSERT INTO "condition_patterns" ("custom_format_name", "condition_name", "regul
 -- --- END op 1008
 
 -- --- BEGIN op 1009 ( insert regular_expression "REGEX_FR - VFQ" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_FR - VFQ', '\b(VFQ|VFI)\b');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_FR - VFQ', '\b(VFQ|VFI)\b');
 -- --- END op 1009
 
 -- --- BEGIN op 1010 ( insert custom_format "FR - VFQ" )
@@ -57,7 +57,7 @@ INSERT INTO "condition_patterns" ("custom_format_name", "condition_name", "regul
 -- --- END op 1011
 
 -- --- BEGIN op 1012 ( insert regular_expression "REGEX_Tag - 4K Light / Light" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_Tag - 4K Light / Light', '(?i)\b(4K[\.\-_ ]?Light|UHD[\.\-_ ]?Light|Light)\b');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_Tag - 4K Light / Light', '(?i)\b(4K[\.\-_ ]?Light|UHD[\.\-_ ]?Light|Light)\b');
 -- --- END op 1012
 
 -- --- BEGIN op 1013 ( insert custom_format "Tag - 4K Light / Light" )
@@ -70,7 +70,7 @@ INSERT INTO "condition_patterns" ("custom_format_name", "condition_name", "regul
 -- --- END op 1014
 
 -- --- BEGIN op 1015 ( insert regular_expression "REGEX_Codec - x265 / HEVC" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_Codec - x265 / HEVC', '(?i)\b(x265|HEVC|H\.?265)\b');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_Codec - x265 / HEVC', '(?i)\b(x265|HEVC|H\.?265)\b');
 -- --- END op 1015
 
 -- --- BEGIN op 1016 ( insert custom_format "Codec - x265 / HEVC" )
@@ -83,7 +83,7 @@ INSERT INTO "condition_patterns" ("custom_format_name", "condition_name", "regul
 -- --- END op 1017
 
 -- --- BEGIN op 1018 ( insert regular_expression "REGEX_Quality - 10bit HDR" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_Quality - 10bit HDR', '(?i)\b(10[\.\-_]?bit|HDR|HDR10|DV|Dolby[\.\-_]?Vision)\b');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_Quality - 10bit HDR', '(?i)\b(10[\.\-_]?bit|HDR|HDR10|DV|Dolby[\.\-_]?Vision)\b');
 -- --- END op 1018
 
 -- --- BEGIN op 1019 ( insert custom_format "Quality - 10bit HDR" )
@@ -96,7 +96,7 @@ INSERT INTO "condition_patterns" ("custom_format_name", "condition_name", "regul
 -- --- END op 1020
 
 -- --- BEGIN op 1021 ( insert regular_expression "REGEX_Teams - Light HQ" )
-INSERT INTO "regular_expressions" ("name", "regular_expression") VALUES ('REGEX_Teams - Light HQ', '(?i)\b(QxR|Tigole|Silence|PSA|QTZ|d3g|UTR|Edge2020|Vyndros)\b');
+INSERT INTO "regular_expressions" ("name", "pattern") VALUES ('REGEX_Teams - Light HQ', '(?i)\b(QxR|Tigole|Silence|PSA|QTZ|d3g|UTR|Edge2020|Vyndros)\b');
 -- --- END op 1021
 
 -- --- BEGIN op 1022 ( insert custom_format "Teams - Light HQ" )
