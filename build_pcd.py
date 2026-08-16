@@ -1,51 +1,51 @@
 import os
 import json
 
-# --- 1. CONFIGURATION DES CUSTOM FORMATS ---
+# --- 1. CUSTOM FORMATS CONFIGURATION ---
 custom_formats = {
     "fr-multi-vff": {
         "name": "FR - MULTi & VFF",
-        "description": "Contient obligatoirement la VO et une piste VFF.",
+        "description": "Must contain original audio and a VFF track.",
         "regex": "(?i)(?=.*\\b(MULTI|DUAL)\\b)(?=.*\\b(VFF|TRUEFRENCH|VF2|VOF|VOFR)\\b)"
     },
     "fr-vf-mono": {
         "name": "FR - VF Mono",
-        "description": "Piste VF seule (sans MULTi).",
+        "description": "French track only (without MULTi).",
         "regex": "(?i)\\b(FRENCH|VF|VFF|TRUEFRENCH|VF2|VOF|VOFR)\\b(?!.*\\b(MULTI|DUAL)\\b)"
     },
     "fr-vostfr": {
         "name": "FR - VOSTFR",
-        "description": "Sous-titres FR incrustés/inclus.",
+        "description": "Embedded or included French subtitles.",
         "regex": "(?i)\\b(VOST(\\.|\\-)?FR|SUB\\.?FRENCH|STFR)\\b"
     },
     "fr-vfq": {
         "name": "FR - VFQ",
-        "description": "Doublage québécois (à rejeter).",
+        "description": "Quebec dubbing (to be rejected).",
         "regex": "\\b(VFQ|VFI)\\b"
     },
     "tag-4k-light": {
         "name": "Tag - 4K Light / Light",
-        "description": "Mention explicite de Light.",
+        "description": "Explicit Light tag.",
         "regex": "(?i)\\b(4K[\\.\\-_ ]?Light|UHD[\\.\\-_ ]?Light|Light)\\b"
     },
     "codec-x265": {
         "name": "Codec - x265 / HEVC",
-        "description": "Norme de compression cible.",
+        "description": "Target compression standard.",
         "regex": "(?i)\\b(x265|HEVC|H\\.?265)\\b"
     },
     "quality-10bit-hdr": {
         "name": "Quality - 10bit HDR",
-        "description": "Mastering 10-bit / HDR / DV.",
+        "description": "10-bit / HDR / DV mastering.",
         "regex": "(?i)\\b(10[\\.\\-_]?bit|HDR|HDR10|DV|Dolby[\\.\\-_]?Vision)\\b"
     },
     "teams-light-hq": {
         "name": "Teams - Light HQ",
-        "description": "Encodeurs de référence.",
+        "description": "Reference release groups.",
         "regex": "(?i)\\b(QxR|Tigole|Silence|PSA|QTZ|d3g|UTR|Edge2020|Vyndros)\\b"
     }
 }
 
-# --- 2. MATRICE DE SCORING ---
+# --- 2. SCORING MATRIX ---
 scoring_multi = [
     {"trash_id": "fr-multi-vff", "score": 15000},
     {"trash_id": "fr-vf-mono", "score": 10000},
@@ -68,7 +68,7 @@ scoring_vo = [
     {"trash_id": "quality-10bit-hdr", "score": 2000}
 ]
 
-# --- 3. CONFIGURATION DES PROFILS ---
+# --- 3. PROFILES CONFIGURATION ---
 profiles = [
     {"id": "1080p-efficient-multi-vff", "name": "1080p Efficient - MULTi VFF", "min_score": 10000, "qualities": ["WEBDL-1080p", "Bluray-1080p"], "scoring": scoring_multi},
     {"id": "1080p-efficient-vo-vostfr", "name": "1080p Efficient - VO / VOSTFR", "min_score": 2000, "qualities": ["WEBDL-1080p", "Bluray-1080p"], "scoring": scoring_vo},
@@ -78,19 +78,22 @@ profiles = [
     {"id": "2160p-efficient-vo-vostfr", "name": "2160p Efficient - VO / VOSTFR", "min_score": 2000, "qualities": ["WEBDL-2160p", "Bluray-2160p"], "scoring": scoring_vo}
 ]
 
-# --- 4. FONCTIONS DE GÉNÉRATION PCD ---
+# --- 4. PCD GENERATION FUNCTIONS ---
 def build_directories():
-    # Création des sous-dossiers dans ops/ pour garder ça propre
     for d in ["ops/custom-formats", "ops/profiles", "ops/quality-definitions", "tweaks", "deps"]:
         os.makedirs(d, exist_ok=True)
 
 def generate_manifest():
     manifest = {
         "name": "Custom Light Stack",
-        "description": "Base de données sur-mesure pour 1080p/2160p Light",
+        "description": "Custom database for 1080p/2160p Light releases",
         "author": "JuGdx",
         "version": "1.0.0",
-        "schema_version": 1
+        "schema_version": "1.1.0",
+        "arr_types": ["radarr", "sonarr"],
+        "profilarr": {
+            "minimum_version": "2.0.0"
+        }
     }
     with open("pcd.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
@@ -128,25 +131,25 @@ def generate_profiles():
             json.dump(payload, f, indent=2, ensure_ascii=False)
 
 def generate_quality_definitions():
-    payload = {
-        "type": "radarr",
-        "qualities": [
-            {"quality": "WEBDL-1080p", "min": 0, "max": 2000},
-            {"quality": "Bluray-1080p", "min": 0, "max": 2000},
-            {"quality": "WEBDL-2160p", "min": 0, "max": 2000},
-            {"quality": "Bluray-2160p", "min": 0, "max": 2000}
-        ]
-    }
     for arr in ["radarr", "sonarr"]:
-        payload["type"] = arr
+        payload = {
+            "trash_id": f"quality-definition-{arr}",
+            "type": arr,
+            "qualities": [
+                {"quality": "WEBDL-1080p", "min": 0, "max": 2000},
+                {"quality": "Bluray-1080p", "min": 0, "max": 2000},
+                {"quality": "WEBDL-2160p", "min": 0, "max": 2000},
+                {"quality": "Bluray-2160p", "min": 0, "max": 2000}
+            ]
+        }
         with open(f"ops/quality-definitions/{arr}.json", "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False)
 
-# --- 5. EXÉCUTION ---
+# --- 5. EXECUTION ---
 if __name__ == "__main__":
     build_directories()
     generate_manifest()
     generate_formats()
     generate_profiles()
     generate_quality_definitions()
-    print("✅ PCD generated! Go check your ops folder!")
+    print("✅ PCD v2 structure generated successfully!")

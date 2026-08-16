@@ -1,6 +1,6 @@
 {
   "name": "Codec - x265 / HEVC",
-  "description": "Norme de compression cible.",
+  "description": "Target compression standard.",
   "trash_id": "codec-x265",
   "specifications": [
     {

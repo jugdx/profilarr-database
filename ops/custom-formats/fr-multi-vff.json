@@ -1,6 +1,6 @@
 {
   "name": "FR - MULTi & VFF",
-  "description": "Contient obligatoirement la VO et une piste VFF.",
+  "description": "Must contain original audio and a VFF track.",
   "trash_id": "fr-multi-vff",
   "specifications": [
     {
