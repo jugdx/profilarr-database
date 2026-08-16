@@ -1,7 +1,8 @@
 {
   "name": "FR - MULTi & VFF",
   "description": "Must contain original audio and a VFF track.",
-  "trash_id": "fr-multi-vff",
+  "trash_id": "89ce62982fac23c445d9b3a1dc7bc5ca",
+  "includeCustomFormatWhenRenaming": false,
   "specifications": [
     {
       "name": "Regex",

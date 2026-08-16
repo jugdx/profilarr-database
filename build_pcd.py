@@ -1,5 +1,10 @@
 import os
 import json
+import hashlib
+
+def get_hash(text):
+    """Generates a 32-character MD5 hash (TRaSH/Profilarr Standard)"""
+    return hashlib.md5(text.encode('utf-8')).hexdigest()
 
 # --- 1. CUSTOM FORMATS CONFIGURATION ---
 custom_formats = {
@@ -47,25 +52,25 @@ custom_formats = {
 
 # --- 2. SCORING MATRIX ---
 scoring_multi = [
-    {"trash_id": "fr-multi-vff", "score": 15000},
-    {"trash_id": "fr-vf-mono", "score": 10000},
-    {"trash_id": "fr-vostfr", "score": 0},
-    {"trash_id": "fr-vfq", "score": -50000},
-    {"trash_id": "tag-4k-light", "score": 3000},
-    {"trash_id": "teams-light-hq", "score": 2500},
-    {"trash_id": "codec-x265", "score": 2000},
-    {"trash_id": "quality-10bit-hdr", "score": 2000}
+    {"trash_id": get_hash("fr-multi-vff"), "score": 15000},
+    {"trash_id": get_hash("fr-vf-mono"), "score": 10000},
+    {"trash_id": get_hash("fr-vostfr"), "score": 0},
+    {"trash_id": get_hash("fr-vfq"), "score": -50000},
+    {"trash_id": get_hash("tag-4k-light"), "score": 3000},
+    {"trash_id": get_hash("teams-light-hq"), "score": 2500},
+    {"trash_id": get_hash("codec-x265"), "score": 2000},
+    {"trash_id": get_hash("quality-10bit-hdr"), "score": 2000}
 ]
 
 scoring_vo = [
-    {"trash_id": "fr-multi-vff", "score": 15000},
-    {"trash_id": "fr-vostfr", "score": 5000},
-    {"trash_id": "fr-vf-mono", "score": -50000},
-    {"trash_id": "fr-vfq", "score": -50000},
-    {"trash_id": "tag-4k-light", "score": 3000},
-    {"trash_id": "teams-light-hq", "score": 2500},
-    {"trash_id": "codec-x265", "score": 2000},
-    {"trash_id": "quality-10bit-hdr", "score": 2000}
+    {"trash_id": get_hash("fr-multi-vff"), "score": 15000},
+    {"trash_id": get_hash("fr-vostfr"), "score": 5000},
+    {"trash_id": get_hash("fr-vf-mono"), "score": -50000},
+    {"trash_id": get_hash("fr-vfq"), "score": -50000},
+    {"trash_id": get_hash("tag-4k-light"), "score": 3000},
+    {"trash_id": get_hash("teams-light-hq"), "score": 2500},
+    {"trash_id": get_hash("codec-x265"), "score": 2000},
+    {"trash_id": get_hash("quality-10bit-hdr"), "score": 2000}
 ]
 
 # --- 3. PROFILES CONFIGURATION ---
@@ -103,7 +108,8 @@ def generate_formats():
         payload = {
             "name": data["name"],
             "description": data["description"],
-            "trash_id": cf_id,
+            "trash_id": get_hash(cf_id),
+            "includeCustomFormatWhenRenaming": False,
             "specifications": [
                 {
                     "name": "Regex",
@@ -121,7 +127,7 @@ def generate_profiles():
     for p in profiles:
         payload = {
             "name": p["name"],
-            "trash_id": p["id"],
+            "trash_id": get_hash(p["id"]),
             "upgrades_allowed": False,
             "minimum_custom_format_score": p["min_score"],
             "qualities": [{"name": q} for q in p["qualities"]],
@@ -133,7 +139,7 @@ def generate_profiles():
 def generate_quality_definitions():
     for arr in ["radarr", "sonarr"]:
         payload = {
-            "trash_id": f"quality-definition-{arr}",
+            "trash_id": get_hash(f"quality-definition-{arr}"),
             "type": arr,
             "qualities": [
                 {"quality": "WEBDL-1080p", "min": 0, "max": 2000},
@@ -152,4 +158,4 @@ if __name__ == "__main__":
     generate_formats()
     generate_profiles()
     generate_quality_definitions()
-    print("✅ PCD v2 structure generated successfully!")
+    print("✅ PCD v2 structure generated successfully with strict TRaSH MD5 UUIDs!")

@@ -1,7 +1,8 @@
 {
   "name": "FR - VF Mono",
   "description": "French track only (without MULTi).",
-  "trash_id": "fr-vf-mono",
+  "trash_id": "af3bfb5914c47331894f98e0bb1954d8",
+  "includeCustomFormatWhenRenaming": false,
   "specifications": [
     {
       "name": "Regex",

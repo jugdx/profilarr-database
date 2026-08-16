@@ -1,7 +1,8 @@
 {
   "name": "Tag - 4K Light / Light",
   "description": "Explicit Light tag.",
-  "trash_id": "tag-4k-light",
+  "trash_id": "17a18e038439930712e0dc9161d330a8",
+  "includeCustomFormatWhenRenaming": false,
   "specifications": [
     {
       "name": "Regex",

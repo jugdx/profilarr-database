@@ -1,7 +1,8 @@
 {
   "name": "Teams - Light HQ",
   "description": "Reference release groups.",
-  "trash_id": "teams-light-hq",
+  "trash_id": "f153434df01d50c63b9a3689112e9476",
+  "includeCustomFormatWhenRenaming": false,
   "specifications": [
     {
       "name": "Regex",

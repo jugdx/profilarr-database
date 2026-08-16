@@ -1,7 +1,8 @@
 {
   "name": "FR - VOSTFR",
   "description": "Embedded or included French subtitles.",
-  "trash_id": "fr-vostfr",
+  "trash_id": "44fe63703cc1d905d9ccbc80c0e0176f",
+  "includeCustomFormatWhenRenaming": false,
   "specifications": [
     {
       "name": "Regex",
