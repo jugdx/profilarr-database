@@ -9,9 +9,12 @@
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
       "required": true,
-      "fields": {
-        "value": "(?i)\\b(VOST(\\.|\\-)?FR|SUB\\.?FRENCH|STFR)\\b"
-      }
+      "fields": [
+        {
+          "name": "value",
+          "value": "(?i)\\b(VOST(\\.|\\-)?FR|SUB\\.?FRENCH|STFR)\\b"
+        }
+      ]
     }
   ]
 }

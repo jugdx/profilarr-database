@@ -9,9 +9,12 @@
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
       "required": true,
-      "fields": {
-        "value": "(?i)\\b(QxR|Tigole|Silence|PSA|QTZ|d3g|UTR|Edge2020|Vyndros)\\b"
-      }
+      "fields": [
+        {
+          "name": "value",
+          "value": "(?i)\\b(QxR|Tigole|Silence|PSA|QTZ|d3g|UTR|Edge2020|Vyndros)\\b"
+        }
+      ]
     }
   ]
 }

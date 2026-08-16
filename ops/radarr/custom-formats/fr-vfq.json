@@ -9,9 +9,12 @@
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
       "required": true,
-      "fields": {
-        "value": "\\b(VFQ|VFI)\\b"
-      }
+      "fields": [
+        {
+          "name": "value",
+          "value": "\\b(VFQ|VFI)\\b"
+        }
+      ]
     }
   ]
 }

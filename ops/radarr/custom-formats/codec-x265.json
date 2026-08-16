@@ -9,9 +9,12 @@
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
       "required": true,
-      "fields": {
-        "value": "(?i)\\b(x265|HEVC|H\\.?265)\\b"
-      }
+      "fields": [
+        {
+          "name": "value",
+          "value": "(?i)\\b(x265|HEVC|H\\.?265)\\b"
+        }
+      ]
     }
   ]
 }

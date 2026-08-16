@@ -9,9 +9,12 @@
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
       "required": true,
-      "fields": {
-        "value": "(?i)\\b(10[\\.\\-_]?bit|HDR|HDR10|DV|Dolby[\\.\\-_]?Vision)\\b"
-      }
+      "fields": [
+        {
+          "name": "value",
+          "value": "(?i)\\b(10[\\.\\-_]?bit|HDR|HDR10|DV|Dolby[\\.\\-_]?Vision)\\b"
+        }
+      ]
     }
   ]
 }

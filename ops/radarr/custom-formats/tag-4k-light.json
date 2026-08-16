@@ -9,9 +9,12 @@
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
       "required": true,
-      "fields": {
-        "value": "(?i)\\b(4K[\\.\\-_ ]?Light|UHD[\\.\\-_ ]?Light|Light)\\b"
-      }
+      "fields": [
+        {
+          "name": "value",
+          "value": "(?i)\\b(4K[\\.\\-_ ]?Light|UHD[\\.\\-_ ]?Light|Light)\\b"
+        }
+      ]
     }
   ]
 }

@@ -9,9 +9,12 @@
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
       "required": true,
-      "fields": {
-        "value": "(?i)(?=.*\\b(MULTI|DUAL)\\b)(?=.*\\b(VFF|TRUEFRENCH|VF2|VOF|VOFR)\\b)"
-      }
+      "fields": [
+        {
+          "name": "value",
+          "value": "(?i)(?=.*\\b(MULTI|DUAL)\\b)(?=.*\\b(VFF|TRUEFRENCH|VF2|VOF|VOFR)\\b)"
+        }
+      ]
     }
   ]
 }
