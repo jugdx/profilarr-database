@@ -1,14 +1,7 @@
 {
-    "name": "my-database",
-    "version": "1.0.0",
-    "description": "My custom Arr configurations",
-    "arr_types": ["radarr", "sonarr"],
-
-    "dependencies": {
-        "https://github.com/Dictionarry-Hub/schema": "1.1.0"
-    },
-
-    "profilarr": {
-        "minimum_version": "2.0.0"
-    }
+  "name": "Custom Light Stack",
+  "description": "Base de données sur-mesure pour 1080p/2160p Light",
+  "author": "JuGdx",
+  "version": "1.0.0",
+  "schema_version": 1
 }

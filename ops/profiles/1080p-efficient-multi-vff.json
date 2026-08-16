@@ -1,0 +1,48 @@
+{
+  "name": "1080p Efficient - MULTi VFF",
+  "trash_id": "1080p-efficient-multi-vff",
+  "upgrades_allowed": false,
+  "minimum_custom_format_score": 10000,
+  "qualities": [
+    {
+      "name": "WEBDL-1080p"
+    },
+    {
+      "name": "Bluray-1080p"
+    }
+  ],
+  "custom_format_scorings": [
+    {
+      "trash_id": "fr-multi-vff",
+      "score": 15000
+    },
+    {
+      "trash_id": "fr-vf-mono",
+      "score": 10000
+    },
+    {
+      "trash_id": "fr-vostfr",
+      "score": 0
+    },
+    {
+      "trash_id": "fr-vfq",
+      "score": -50000
+    },
+    {
+      "trash_id": "tag-4k-light",
+      "score": 3000
+    },
+    {
+      "trash_id": "teams-light-hq",
+      "score": 2500
+    },
+    {
+      "trash_id": "codec-x265",
+      "score": 2000
+    },
+    {
+      "trash_id": "quality-10bit-hdr",
+      "score": 2000
+    }
+  ]
+}

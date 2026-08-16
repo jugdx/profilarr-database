@@ -1,0 +1,16 @@
+{
+  "name": "FR - VF Mono",
+  "description": "Piste VF seule (sans MULTi).",
+  "trash_id": "fr-vf-mono",
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "(?i)\\b(FRENCH|VF|VFF|TRUEFRENCH|VF2|VOF|VOFR)\\b(?!.*\\b(MULTI|DUAL)\\b)"
+      }
+    }
+  ]
+}

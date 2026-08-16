@@ -1,0 +1,16 @@
+{
+  "name": "FR - VOSTFR",
+  "description": "Sous-titres FR incrustés/inclus.",
+  "trash_id": "fr-vostfr",
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "(?i)\\b(VOST(\\.|\\-)?FR|SUB\\.?FRENCH|STFR)\\b"
+      }
+    }
+  ]
+}

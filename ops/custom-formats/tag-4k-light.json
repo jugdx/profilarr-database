@@ -1,0 +1,16 @@
+{
+  "name": "Tag - 4K Light / Light",
+  "description": "Mention explicite de Light.",
+  "trash_id": "tag-4k-light",
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "(?i)\\b(4K[\\.\\-_ ]?Light|UHD[\\.\\-_ ]?Light|Light)\\b"
+      }
+    }
+  ]
+}

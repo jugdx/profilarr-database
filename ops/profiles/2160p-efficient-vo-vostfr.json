@@ -1,0 +1,48 @@
+{
+  "name": "2160p Efficient - VO / VOSTFR",
+  "trash_id": "2160p-efficient-vo-vostfr",
+  "upgrades_allowed": false,
+  "minimum_custom_format_score": 2000,
+  "qualities": [
+    {
+      "name": "WEBDL-2160p"
+    },
+    {
+      "name": "Bluray-2160p"
+    }
+  ],
+  "custom_format_scorings": [
+    {
+      "trash_id": "fr-multi-vff",
+      "score": 15000
+    },
+    {
+      "trash_id": "fr-vostfr",
+      "score": 5000
+    },
+    {
+      "trash_id": "fr-vf-mono",
+      "score": -50000
+    },
+    {
+      "trash_id": "fr-vfq",
+      "score": -50000
+    },
+    {
+      "trash_id": "tag-4k-light",
+      "score": 3000
+    },
+    {
+      "trash_id": "teams-light-hq",
+      "score": 2500
+    },
+    {
+      "trash_id": "codec-x265",
+      "score": 2000
+    },
+    {
+      "trash_id": "quality-10bit-hdr",
+      "score": 2000
+    }
+  ]
+}

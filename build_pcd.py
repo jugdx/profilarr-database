@@ -88,7 +88,7 @@ def generate_manifest():
     manifest = {
         "name": "Custom Light Stack",
         "description": "Base de données sur-mesure pour 1080p/2160p Light",
-        "author": "Julien",
+        "author": "JuGdx",
         "version": "1.0.0",
         "schema_version": 1
     }

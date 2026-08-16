@@ -1,0 +1,16 @@
+{
+  "name": "Codec - x265 / HEVC",
+  "description": "Norme de compression cible.",
+  "trash_id": "codec-x265",
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "(?i)\\b(x265|HEVC|H\\.?265)\\b"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "FR - VFQ",
+  "description": "Doublage québécois (à rejeter).",
+  "trash_id": "fr-vfq",
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "\\b(VFQ|VFI)\\b"
+      }
+    }
+  ]
+}
