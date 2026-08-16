@@ -1,8 +1,8 @@
 {
   "name": "1080p Efficient - VO / VOSTFR",
   "trash_id": "198d0e1f9c5e497a4622b38fbd6f9020",
-  "upgrades_allowed": false,
-  "minimum_custom_format_score": 2000,
+  "upgradeAllowed": false,
+  "minFormatScore": 2000,
   "qualities": [
     {
       "name": "WEBDL-1080p"
@@ -11,7 +11,7 @@
       "name": "Bluray-1080p"
     }
   ],
-  "custom_format_scorings": [
+  "customFormats": [
     {
       "trash_id": "89ce62982fac23c445d9b3a1dc7bc5ca",
       "score": 15000

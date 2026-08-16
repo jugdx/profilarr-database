@@ -1,8 +1,8 @@
 {
-  "name": "1080p Quality HDR - MULTi VFF",
-  "trash_id": "75b8702ec9481c410c90022b33d11a92",
-  "upgrades_allowed": false,
-  "minimum_custom_format_score": 10000,
+  "name": "1080p Quality HDR - VO / VOSTFR",
+  "trash_id": "ddfe3f12517fb9cca5c35c2d95481e60",
+  "upgradeAllowed": false,
+  "minFormatScore": 2000,
   "qualities": [
     {
       "name": "WEBDL-1080p"
@@ -11,18 +11,18 @@
       "name": "Bluray-1080p"
     }
   ],
-  "custom_format_scorings": [
+  "customFormats": [
     {
       "trash_id": "89ce62982fac23c445d9b3a1dc7bc5ca",
       "score": 15000
     },
     {
-      "trash_id": "af3bfb5914c47331894f98e0bb1954d8",
-      "score": 10000
+      "trash_id": "44fe63703cc1d905d9ccbc80c0e0176f",
+      "score": 5000
     },
     {
-      "trash_id": "44fe63703cc1d905d9ccbc80c0e0176f",
-      "score": 0
+      "trash_id": "af3bfb5914c47331894f98e0bb1954d8",
+      "score": -50000
     },
     {
       "trash_id": "5d8ed8fe4981ba9d9fbba3ce919c8d7d",

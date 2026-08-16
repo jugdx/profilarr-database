@@ -86,12 +86,13 @@ profiles = [
 
 # --- 4. PCD GENERATION FUNCTIONS ---
 def build_directories():
+    # Purge totale pour nettoyer les anciennes expériences
     if os.path.exists("ops"):
         shutil.rmtree("ops")
         
-    for arr in ["radarr", "sonarr"]:
-        for d in ["custom-formats", "quality-profiles", "quality-definitions"]:
-            os.makedirs(f"ops/{arr}/{d}", exist_ok=True)
+    # Seulement les 2 dossiers validés par l'interface, avec underscores
+    for d in ["ops/custom_formats", "ops/quality_profiles"]:
+        os.makedirs(d, exist_ok=True)
 
 def generate_manifest():
     manifest = {
@@ -133,37 +134,20 @@ def generate_formats():
                 }
             ]
         }
-        for arr in ["radarr", "sonarr"]:
-            with open(f"ops/{arr}/custom-formats/{cf_id}.json", "w", encoding="utf-8") as f:
-                json.dump(payload, f, indent=2, ensure_ascii=False)
+        with open(f"ops/custom_formats/{cf_id}.json", "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2, ensure_ascii=False)
 
 def generate_profiles():
     for p in profiles:
         payload = {
             "name": p["name"],
             "trash_id": get_hash(p["id"]),
-            "upgrades_allowed": False,
-            "minimum_custom_format_score": p["min_score"],
+            "upgradeAllowed": False,                 # FIX: camelCase
+            "minFormatScore": p["min_score"],        # FIX: camelCase
             "qualities": [{"name": q} for q in p["qualities"]],
-            "custom_format_scorings": p["scoring"]
+            "customFormats": p["scoring"]            # FIX: camelCase
         }
-        for arr in ["radarr", "sonarr"]:
-            with open(f"ops/{arr}/quality-profiles/{p['id']}.json", "w", encoding="utf-8") as f:
-                json.dump(payload, f, indent=2, ensure_ascii=False)
-
-def generate_quality_definitions():
-    for arr in ["radarr", "sonarr"]:
-        payload = {
-            "trash_id": get_hash(f"quality-definition-{arr}"),
-            "type": arr,
-            "qualities": [
-                {"quality": "WEBDL-1080p", "min": 0, "max": 2000},
-                {"quality": "Bluray-1080p", "min": 0, "max": 2000},
-                {"quality": "WEBDL-2160p", "min": 0, "max": 2000},
-                {"quality": "Bluray-2160p", "min": 0, "max": 2000}
-            ]
-        }
-        with open(f"ops/{arr}/quality-definitions/{arr}.json", "w", encoding="utf-8") as f:
+        with open(f"ops/quality_profiles/{p['id']}.json", "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False)
 
 # --- 5. EXECUTION ---
@@ -172,5 +156,4 @@ if __name__ == "__main__":
     generate_manifest()
     generate_formats()
     generate_profiles()
-    generate_quality_definitions()
-    print("✅ PCD v2 structure generated successfully with Radarr/Sonarr routing!")
+    print("✅ PCD v2 structure generated with absolute strict schema compliance!")

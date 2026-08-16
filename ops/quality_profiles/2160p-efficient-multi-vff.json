@@ -1,17 +1,17 @@
 {
-  "name": "1080p Efficient - MULTi VFF",
-  "trash_id": "026b6af43d95d23ec7d771812aa06af9",
-  "upgrades_allowed": false,
-  "minimum_custom_format_score": 10000,
+  "name": "2160p Efficient - MULTi VFF",
+  "trash_id": "9cc4dadeac3c458915042b865affdf76",
+  "upgradeAllowed": false,
+  "minFormatScore": 10000,
   "qualities": [
     {
-      "name": "WEBDL-1080p"
+      "name": "WEBDL-2160p"
     },
     {
-      "name": "Bluray-1080p"
+      "name": "Bluray-2160p"
     }
   ],
-  "custom_format_scorings": [
+  "customFormats": [
     {
       "trash_id": "89ce62982fac23c445d9b3a1dc7bc5ca",
       "score": 15000
