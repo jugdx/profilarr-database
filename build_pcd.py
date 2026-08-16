@@ -1,6 +1,7 @@
 import os
 import json
 import hashlib
+import shutil
 
 def get_hash(text):
     """Generates a 32-character MD5 hash (TRaSH/Profilarr Standard)"""
@@ -85,7 +86,11 @@ profiles = [
 
 # --- 4. PCD GENERATION FUNCTIONS ---
 def build_directories():
-    for d in ["ops/custom-formats", "ops/profiles", "ops/quality-definitions", "tweaks", "deps"]:
+    # Purge the old ops directory entirely to avoid ghost folders
+    if os.path.exists("ops"):
+        shutil.rmtree("ops")
+        
+    for d in ["ops/custom-formats", "ops/quality-profiles", "ops/quality-definitions", "tweaks", "deps"]:
         os.makedirs(d, exist_ok=True)
 
 def generate_manifest():
@@ -95,6 +100,9 @@ def generate_manifest():
         "author": "JuGdx",
         "version": "1.0.0",
         "schema_version": "1.1.0",
+        "dependencies": {
+            "https://github.com/Dictionarry-Hub/schema": "1.1.0"
+        },
         "arr_types": ["radarr", "sonarr"],
         "profilarr": {
             "minimum_version": "2.0.0"
@@ -133,7 +141,7 @@ def generate_profiles():
             "qualities": [{"name": q} for q in p["qualities"]],
             "custom_format_scorings": p["scoring"]
         }
-        with open(f"ops/profiles/{p['id']}.json", "w", encoding="utf-8") as f:
+        with open(f"ops/quality-profiles/{p['id']}.json", "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False)
 
 def generate_quality_definitions():
@@ -158,4 +166,4 @@ if __name__ == "__main__":
     generate_formats()
     generate_profiles()
     generate_quality_definitions()
-    print("✅ PCD v2 structure generated successfully with strict TRaSH MD5 UUIDs!")
+    print("✅ PCD v2 structure generated successfully with schema dependencies!")
