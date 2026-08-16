@@ -1,7 +1,7 @@
 import os
 import json
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
 
 # --- 1. CUSTOM FORMATS & REGEX CONFIGURATION ---
 custom_formats = {
@@ -165,7 +165,7 @@ def build_sql():
         add_op("quality_profile_custom_formats", prof_name, score_queries)
 
     # Header du fichier SQL (Standard Profilarr Export)
-    exported_at = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    exported_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     op_ids_list = ", ".join(str(i) for i in range(1000, op_id))
     
     header = f"""-- @operation: export
