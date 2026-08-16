@@ -86,10 +86,12 @@ profiles = [
 
 # --- 4. PCD GENERATION FUNCTIONS ---
 def build_directories():
+    # Purge pour supprimer les anciens dossiers avec les tirets du milieu
     if os.path.exists("ops"):
         shutil.rmtree("ops")
         
-    for d in ["ops/custom-formats", "ops/quality-profiles", "ops/quality-definitions", "tweaks", "deps"]:
+    # NOUVEAUX NOMS DE DOSSIERS (Underscores exigés par le schéma Profilarr)
+    for d in ["ops/custom_formats", "ops/quality_profiles", "ops/quality_definitions", "tweaks", "deps"]:
         os.makedirs(d, exist_ok=True)
 
 def generate_manifest():
@@ -116,7 +118,7 @@ def generate_formats():
             "name": data["name"],
             "description": data["description"],
             "trash_id": get_hash(cf_id),
-            "arr_types": ["radarr", "sonarr"], # FIX : Application ciblée
+            "arr_types": ["radarr", "sonarr"],
             "includeCustomFormatWhenRenaming": False,
             "specifications": [
                 {
@@ -127,13 +129,13 @@ def generate_formats():
                     "fields": [
                         {
                             "name": "value",
-                            "value": data["regex"] # FIX : Tableau d'objets exigé par le schéma
+                            "value": data["regex"]
                         }
                     ]
                 }
             ]
         }
-        with open(f"ops/custom-formats/{cf_id}.json", "w", encoding="utf-8") as f:
+        with open(f"ops/custom_formats/{cf_id}.json", "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False)
 
 def generate_profiles():
@@ -141,20 +143,20 @@ def generate_profiles():
         payload = {
             "name": p["name"],
             "trash_id": get_hash(p["id"]),
-            "arr_types": ["radarr", "sonarr"], # FIX : Application ciblée
+            "arr_types": ["radarr", "sonarr"],
             "upgrades_allowed": False,
             "minimum_custom_format_score": p["min_score"],
             "qualities": [{"name": q} for q in p["qualities"]],
             "custom_format_scorings": p["scoring"]
         }
-        with open(f"ops/quality-profiles/{p['id']}.json", "w", encoding="utf-8") as f:
+        with open(f"ops/quality_profiles/{p['id']}.json", "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False)
 
 def generate_quality_definitions():
     for arr in ["radarr", "sonarr"]:
         payload = {
             "trash_id": get_hash(f"quality-definition-{arr}"),
-            "arr_types": [arr], # FIX : Application ciblée
+            "arr_types": [arr],
             "qualities": [
                 {"quality": "WEBDL-1080p", "min": 0, "max": 2000},
                 {"quality": "Bluray-1080p", "min": 0, "max": 2000},
@@ -162,7 +164,7 @@ def generate_quality_definitions():
                 {"quality": "Bluray-2160p", "min": 0, "max": 2000}
             ]
         }
-        with open(f"ops/quality-definitions/{arr}.json", "w", encoding="utf-8") as f:
+        with open(f"ops/quality_definitions/{arr}.json", "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False)
 
 # --- 5. EXECUTION ---
@@ -172,4 +174,4 @@ if __name__ == "__main__":
     generate_formats()
     generate_profiles()
     generate_quality_definitions()
-    print("✅ PCD v2 structure generated successfully with strict TRaSH schema compliance!")
+    print("✅ PCD v2 structure generated successfully with UNDERSCORE folder names!")
