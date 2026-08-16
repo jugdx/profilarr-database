@@ -3,7 +3,10 @@ import json
 import shutil
 from datetime import datetime, timezone
 
-# --- 1. CUSTOM FORMATS & REGEX CONFIGURATION ---
+def escape_sql(text):
+    return text.replace("'", "''")
+
+# --- 1. CONFIGURATION ---
 custom_formats = {
     "fr-multi-vff": {
         "name": "FR - MULTi & VFF",
@@ -47,7 +50,6 @@ custom_formats = {
     }
 }
 
-# --- 2. SCORING MATRIX ---
 scoring_multi = [
     {"cf_name": custom_formats["fr-multi-vff"]["name"], "score": 15000},
     {"cf_name": custom_formats["fr-vf-mono"]["name"], "score": 10000},
@@ -70,7 +72,6 @@ scoring_vo = [
     {"cf_name": custom_formats["quality-10bit-hdr"]["name"], "score": 2000}
 ]
 
-# --- 3. PROFILES CONFIGURATION ---
 profiles = [
     {"name": "1080p Efficient - MULTi VFF", "min_score": 10000, "scoring": scoring_multi},
     {"name": "1080p Efficient - VO / VOSTFR", "min_score": 2000, "scoring": scoring_vo},
@@ -80,15 +81,29 @@ profiles = [
     {"name": "2160p Efficient - VO / VOSTFR", "min_score": 2000, "scoring": scoring_vo}
 ]
 
-def escape_sql(text):
-    return text.replace("'", "''")
+def write_sql_file(filename, op_id, name_desc, queries):
+    exported_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    content = f"""-- @operation: export
+-- @entity: batch
+-- @name: {name_desc}
+-- @exportedAt: {exported_at}
+-- @opIds: {op_id}
 
-def build_sql():
+-- --- BEGIN op {op_id} ( {name_desc} )
+"""
+    for q in queries:
+        content += f"{q}\n"
+    content += f"-- --- END op {op_id}\n"
+    
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(content)
+
+def build_migration_repo():
     if os.path.exists("ops"):
         shutil.rmtree("ops")
     os.makedirs("ops", exist_ok=True)
     
-    # 1. Génération du Manifeste
+    # Manifeste PCD v2
     manifest = {
         "name": "Custom Light Stack",
         "description": "Custom database for 1080p/2160p Light releases",
@@ -106,80 +121,44 @@ def build_sql():
     with open("pcd.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
 
-    # 2. Génération du fichier SQL
-    sql_lines = []
-    op_id = 1000
+    op_id = 100
     
-    def add_op(entity_type, entity_name, queries):
-        nonlocal op_id
-        sql_lines.append(f"-- --- BEGIN op {op_id} ( insert {entity_type} \"{entity_name}\" )")
-        for query in queries:
-            sql_lines.append(query)
-        sql_lines.append(f"-- --- END op {op_id}\n")
-        op_id += 1
-
-    # Création des Custom Formats et Conditions
+    # 1. Création des Regex et Custom Formats
     for cf_id, data in custom_formats.items():
         name = escape_sql(data["name"])
         desc = escape_sql(data["description"])
         regex = escape_sql(data["regex"])
-        regex_name = f"REGEX_{name}"
+        pattern_name = f"REG_{cf_id}"
         
-        # Insert Regular Expression
-        add_op("regular_expression", regex_name, [
-            f"INSERT INTO \"regular_expressions\" (\"name\", \"pattern\") VALUES ('{regex_name}', '{regex}');"
-        ])
-        
-        # Insert Custom Format
-        add_op("custom_format", name, [
-            f"INSERT INTO \"custom_formats\" (\"name\", \"description\", \"include_in_rename\") VALUES ('{name}', '{desc}', 0);"
-        ])
-        
-        # Link Condition
-        add_op("custom_format_condition", name, [
+        queries = [
+            f"INSERT INTO \"regular_expressions\" (\"name\", \"pattern\") VALUES ('{pattern_name}', '{regex}');",
+            f"INSERT INTO \"custom_formats\" (\"name\", \"description\", \"include_in_rename\") VALUES ('{name}', '{desc}', 0);",
             f"INSERT INTO \"custom_format_conditions\" (\"custom_format_name\", \"name\", \"type\", \"arr_type\", \"negate\", \"required\") VALUES ('{name}', 'Release Title', 'release_title', 'all', 0, 1);",
-            f"INSERT INTO \"condition_patterns\" (\"custom_format_name\", \"condition_name\", \"regular_expression_name\") VALUES ('{name}', 'Release Title', '{regex_name}');"
-        ])
+            f"INSERT INTO \"condition_patterns\" (\"custom_format_name\", \"condition_name\", \"regular_expression_name\") VALUES ('{name}', 'Release Title', '{pattern_name}');"
+        ]
+        
+        filename = f"ops/{op_id}.add-custom-format-{cf_id}.sql"
+        write_sql_file(filename, op_id, f"Add custom format {data['name']}", queries)
+        op_id += 1
 
-    # Création des Profils et Scores
-    for p in profiles:
+    # 2. Création des Profils et association des scores
+    for i, p in enumerate(profiles):
         prof_name = escape_sql(p["name"])
         
-        # Insert Profile
-        add_op("quality_profile", prof_name, [
-            f"INSERT INTO \"quality_profiles\" (\"name\", \"upgrades_allowed\", \"min_format_score\") VALUES ('{prof_name}', 0, {p['min_score']});"
-        ])
+        queries = [
+            f"INSERT INTO \"quality_profiles\" (\"name\", \"upgradeAllowed\", \"minFormatScore\") VALUES ('{prof_name}', 0, {p['min_score']});"
+        ]
         
-        # Insert Scores pour Radarr & Sonarr
-        score_queries = []
         for score_data in p["scoring"]:
             cf_name = escape_sql(score_data["cf_name"])
-            score_val = score_data["score"]
-            score_queries.append(
-                f"INSERT INTO \"quality_profile_custom_formats\" (\"quality_profile_name\", \"custom_format_name\", \"arr_type\", \"score\") VALUES ('{prof_name}', '{cf_name}', 'radarr', {score_val});"
-            )
-            score_queries.append(
-                f"INSERT INTO \"quality_profile_custom_formats\" (\"quality_profile_name\", \"custom_format_name\", \"arr_type\", \"score\") VALUES ('{prof_name}', '{cf_name}', 'sonarr', {score_val});"
-            )
-        
-        add_op("quality_profile_custom_formats", prof_name, score_queries)
+            val = score_data["score"]
+            queries.append(f"INSERT INTO \"quality_profile_custom_formats\" (\"quality_profile_name\", \"custom_format_name\", \"arr_type\", \"score\") VALUES ('{prof_name}', '{cf_name}', 'radarr', {val});")
+            queries.append(f"INSERT INTO \"quality_profile_custom_formats\" (\"quality_profile_name\", \"custom_format_name\", \"arr_type\", \"score\") VALUES ('{prof_name}', '{cf_name}', 'sonarr', {val});")
 
-    # Header du fichier SQL (Standard Profilarr Export)
-    exported_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
-    op_ids_list = ", ".join(str(i) for i in range(1000, op_id))
-    
-    header = f"""-- @operation: export
--- @entity: batch
--- @name: Init JuGdx Light Database
--- @exportedAt: {exported_at}
--- @opIds: {op_ids_list}
-
-"""
-    
-    with open("ops/1.init-jugdx-database.sql", "w", encoding="utf-8") as f:
-        f.write(header)
-        f.write("\n".join(sql_lines))
+        filename = f"ops/{op_id}.add-quality-profile-{i+1}.sql"
+        write_sql_file(filename, op_id, f"Add quality profile {p['name']}", queries)
+        op_id += 1
 
 if __name__ == "__main__":
-    build_sql()
-    print("✅ PCD v2 SQL Migration file generated successfully!")
+    build_migration_repo()
+    print("✅ Modular SQL migration files generated successfully in ops/ !")
