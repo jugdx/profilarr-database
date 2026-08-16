@@ -1,0 +1,17 @@
+{
+  "name": "Quality - 10bit HDR",
+  "description": "10-bit / HDR / DV mastering.",
+  "trash_id": "c96fc3042960259f497bf2143527791d",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "(?i)\\b(10[\\.\\-_]?bit|HDR|HDR10|DV|Dolby[\\.\\-_]?Vision)\\b"
+      }
+    }
+  ]
+}

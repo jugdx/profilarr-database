@@ -1,0 +1,17 @@
+{
+  "name": "FR - VOSTFR",
+  "description": "Embedded or included French subtitles.",
+  "trash_id": "44fe63703cc1d905d9ccbc80c0e0176f",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "(?i)\\b(VOST(\\.|\\-)?FR|SUB\\.?FRENCH|STFR)\\b"
+      }
+    }
+  ]
+}

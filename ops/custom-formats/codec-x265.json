@@ -1,0 +1,17 @@
+{
+  "name": "Codec - x265 / HEVC",
+  "description": "Target compression standard.",
+  "trash_id": "1dc8321cff60c3fca86335df74d09c80",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "Regex",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": true,
+      "fields": {
+        "value": "(?i)\\b(x265|HEVC|H\\.?265)\\b"
+      }
+    }
+  ]
+}
