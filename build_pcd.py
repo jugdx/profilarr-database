@@ -123,7 +123,7 @@ def build_migration_repo():
 
     op_id = 100
     
-    # 1. Création des Regex et Custom Formats
+    # 1. Regex et Custom Formats
     for cf_id, data in custom_formats.items():
         name = escape_sql(data["name"])
         desc = escape_sql(data["description"])
@@ -131,8 +131,8 @@ def build_migration_repo():
         pattern_name = f"REG_{cf_id}"
         
         queries = [
-            f"INSERT INTO \"regular_expressions\" (\"name\", \"pattern\") VALUES ('{pattern_name}', '{regex}');",
-            f"INSERT INTO \"custom_formats\" (\"name\", \"description\", \"include_in_rename\") VALUES ('{name}', '{desc}', 0);",
+            f"INSERT INTO \"regular_expressions\" (\"name\", \"pattern\", \"description\") VALUES ('{pattern_name}', '{regex}', '');",
+            f"INSERT INTO \"custom_formats\" (\"name\", \"description\") VALUES ('{name}', '{desc}');",
             f"INSERT INTO \"custom_format_conditions\" (\"custom_format_name\", \"name\", \"type\", \"arr_type\", \"negate\", \"required\") VALUES ('{name}', 'Release Title', 'release_title', 'all', 0, 1);",
             f"INSERT INTO \"condition_patterns\" (\"custom_format_name\", \"condition_name\", \"regular_expression_name\") VALUES ('{name}', 'Release Title', '{pattern_name}');"
         ]
@@ -141,12 +141,12 @@ def build_migration_repo():
         write_sql_file(filename, op_id, f"Add custom format {data['name']}", queries)
         op_id += 1
 
-    # 2. Création des Profils et association des scores
+    # 2. Quality Profiles & Scores
     for i, p in enumerate(profiles):
         prof_name = escape_sql(p["name"])
         
         queries = [
-            f"INSERT INTO \"quality_profiles\" (\"name\", \"upgradeAllowed\", \"minFormatScore\") VALUES ('{prof_name}', 0, {p['min_score']});"
+            f"INSERT INTO \"quality_profiles\" (\"name\", \"description\", \"upgrades_allowed\", \"minimum_custom_format_score\") VALUES ('{prof_name}', '', 0, {p['min_score']});"
         ]
         
         for score_data in p["scoring"]:

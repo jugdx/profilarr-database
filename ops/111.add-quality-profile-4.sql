@@ -1,11 +1,11 @@
 -- @operation: export
 -- @entity: batch
 -- @name: Add quality profile 1080p Quality HDR - VO / VOSTFR
--- @exportedAt: 2026-08-16T22:05:18.000Z
+-- @exportedAt: 2026-08-17T09:07:50.000Z
 -- @opIds: 111
 
 -- --- BEGIN op 111 ( Add quality profile 1080p Quality HDR - VO / VOSTFR )
-INSERT INTO "quality_profiles" ("name", "upgradeAllowed", "minFormatScore") VALUES ('1080p Quality HDR - VO / VOSTFR', 0, 2000);
+INSERT INTO "quality_profiles" ("name", "description", "upgrades_allowed", "minimum_custom_format_score") VALUES ('1080p Quality HDR - VO / VOSTFR', '', 0, 2000);
 INSERT INTO "quality_profile_custom_formats" ("quality_profile_name", "custom_format_name", "arr_type", "score") VALUES ('1080p Quality HDR - VO / VOSTFR', 'FR - MULTi & VFF', 'radarr', 15000);
 INSERT INTO "quality_profile_custom_formats" ("quality_profile_name", "custom_format_name", "arr_type", "score") VALUES ('1080p Quality HDR - VO / VOSTFR', 'FR - MULTi & VFF', 'sonarr', 15000);
 INSERT INTO "quality_profile_custom_formats" ("quality_profile_name", "custom_format_name", "arr_type", "score") VALUES ('1080p Quality HDR - VO / VOSTFR', 'FR - VOSTFR', 'radarr', 5000);
