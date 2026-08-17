@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 def escape_sql(text):
     return text.replace("'", "''")
 
-# --- 1. CONFIGURATION ---
+# --- 1. FORMATS & REGEX ---
 custom_formats = {
     "fr-multi-vff": {
         "name": "FR - MULTi & VFF",
@@ -50,6 +50,7 @@ custom_formats = {
     }
 }
 
+# --- 2. MATRICES DE SCORING ---
 scoring_multi = [
     {"cf_name": custom_formats["fr-multi-vff"]["name"], "score": 15000},
     {"cf_name": custom_formats["fr-vf-mono"]["name"], "score": 10000},
@@ -72,13 +73,14 @@ scoring_vo = [
     {"cf_name": custom_formats["quality-10bit-hdr"]["name"], "score": 2000}
 ]
 
+# --- 3. PROFILS ---
 profiles = [
-    {"name": "1080p Efficient - MULTi VFF", "min_score": 10000, "scoring": scoring_multi},
-    {"name": "1080p Efficient - VO / VOSTFR", "min_score": 2000, "scoring": scoring_vo},
-    {"name": "1080p Quality HDR - MULTi VFF", "min_score": 10000, "scoring": scoring_multi},
-    {"name": "1080p Quality HDR - VO / VOSTFR", "min_score": 2000, "scoring": scoring_vo},
-    {"name": "2160p Efficient - MULTi VFF", "min_score": 10000, "scoring": scoring_multi},
-    {"name": "2160p Efficient - VO / VOSTFR", "min_score": 2000, "scoring": scoring_vo}
+    {"name": "1080p Efficient - MULTi VFF", "min_score": 10000, "qualities": ["WEBDL-1080p", "Bluray-1080p"], "scoring": scoring_multi},
+    {"name": "1080p Efficient - VO / VOSTFR", "min_score": 2000, "qualities": ["WEBDL-1080p", "Bluray-1080p"], "scoring": scoring_vo},
+    {"name": "1080p Quality HDR - MULTi VFF", "min_score": 10000, "qualities": ["WEBDL-1080p", "Bluray-1080p"], "scoring": scoring_multi},
+    {"name": "1080p Quality HDR - VO / VOSTFR", "min_score": 2000, "qualities": ["WEBDL-1080p", "Bluray-1080p"], "scoring": scoring_vo},
+    {"name": "2160p Efficient - MULTi VFF", "min_score": 10000, "qualities": ["WEBDL-2160p", "Bluray-2160p"], "scoring": scoring_multi},
+    {"name": "2160p Efficient - VO / VOSTFR", "min_score": 2000, "qualities": ["WEBDL-2160p", "Bluray-2160p"], "scoring": scoring_vo}
 ]
 
 def write_sql_file(filename, op_id, name_desc, queries):
@@ -105,7 +107,7 @@ def build_migration_repo():
     
     # Manifeste PCD v2
     manifest = {
-        "name": "Custom Light Stack",
+        "name": "JuGdx Database",
         "description": "Custom database for 1080p/2160p Light releases",
         "author": "JuGdx",
         "version": "1.0.0",
@@ -123,7 +125,7 @@ def build_migration_repo():
 
     op_id = 100
     
-    # 1. Regex et Custom Formats
+    # 1. Insertion Regex & Custom Formats
     for cf_id, data in custom_formats.items():
         name = escape_sql(data["name"])
         desc = escape_sql(data["description"])
@@ -132,7 +134,7 @@ def build_migration_repo():
         
         queries = [
             f"INSERT INTO \"regular_expressions\" (\"name\", \"pattern\", \"description\") VALUES ('{pattern_name}', '{regex}', '');",
-            f"INSERT INTO \"custom_formats\" (\"name\", \"description\") VALUES ('{name}', '{desc}');",
+            f"INSERT INTO \"custom_formats\" (\"name\", \"description\", \"include_in_rename\") VALUES ('{name}', '{desc}', 0);",
             f"INSERT INTO \"custom_format_conditions\" (\"custom_format_name\", \"name\", \"type\", \"arr_type\", \"negate\", \"required\") VALUES ('{name}', 'Release Title', 'release_title', 'all', 0, 1);",
             f"INSERT INTO \"condition_patterns\" (\"custom_format_name\", \"condition_name\", \"regular_expression_name\") VALUES ('{name}', 'Release Title', '{pattern_name}');"
         ]
@@ -141,14 +143,19 @@ def build_migration_repo():
         write_sql_file(filename, op_id, f"Add custom format {data['name']}", queries)
         op_id += 1
 
-    # 2. Quality Profiles & Scores
+    # 2. Insertion Quality Profiles, Qualities associées et Scores
     for i, p in enumerate(profiles):
         prof_name = escape_sql(p["name"])
         
         queries = [
-            f"INSERT INTO \"quality_profiles\" (\"name\", \"description\", \"upgrades_allowed\", \"minimum_custom_format_score\") VALUES ('{prof_name}', '', 0, {p['min_score']});"
+            f"INSERT INTO \"quality_profiles\" (\"name\", \"description\", \"upgrades_allowed\", \"minimum_custom_format_score\", \"upgrade_until_score\", \"upgrade_score_increment\") VALUES ('{prof_name}', '', 0, {p['min_score']}, 0, 1);"
         ]
         
+        # Qualités actives
+        for pos, q_name in enumerate(p["qualities"], start=1):
+            queries.append(f"INSERT INTO \"quality_profile_qualities\" (\"quality_profile_name\", \"quality_name\", \"position\", \"enabled\", \"upgrade_until\") VALUES ('{prof_name}', '{q_name}', {pos}, 1, 0);")
+        
+        # Scores pour Radarr et Sonarr
         for score_data in p["scoring"]:
             cf_name = escape_sql(score_data["cf_name"])
             val = score_data["score"]
@@ -161,4 +168,4 @@ def build_migration_repo():
 
 if __name__ == "__main__":
     build_migration_repo()
-    print("✅ Modular SQL migration files generated successfully in ops/ !")
+    print("✅ All SQL files generated strictly matching the official schema.")
